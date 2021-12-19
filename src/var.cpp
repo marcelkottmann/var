@@ -36,7 +36,7 @@ var::var(const var &other) : type(other.type)
         //do nothing
         break;
     default:
-        throw std::runtime_error("unimplemented type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 }
 
@@ -53,7 +53,7 @@ var::var(var &&other) : type(other.type), str(std::move(other.str)), number(othe
         //do nothing
         break;
     default:
-        throw std::runtime_error("unimplemented type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 }
 
@@ -78,7 +78,7 @@ var::var(vartype type) : type(type)
         // do nothing
         break;
     default:
-        throw std::runtime_error("unimplemented type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 }
 
@@ -203,7 +203,7 @@ var var::toString() const
         break;
 
     default:
-        throw std::runtime_error("unimplemented type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 
     return strResult;
@@ -342,7 +342,7 @@ var var::toJSON() const
         return oss.str();
     }
     default:
-        throw std::runtime_error("unimplemented type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 }
 
@@ -412,7 +412,7 @@ var var::toCode() const
         return oss.str();
     }
     default:
-        throw std::runtime_error("unimplemented type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 }
 
@@ -467,7 +467,7 @@ var var::toNumber() const
         break;
 
     default:
-        throw std::runtime_error("unknown type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 
     return result;
@@ -806,7 +806,7 @@ bool var::operator==(const var &other) const
         case BOOLEAN:
             return !*this == !*this;
         default:
-            throw std::runtime_error("unimplemented type:" + type);
+            throw std::runtime_error("unimplemented type");
         }
     }
     return false;
@@ -934,7 +934,7 @@ var var::length() const
     case ARRAY:
         return static_cast<double>(arr->size());
     default:
-        throw std::runtime_error("unimplemented type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 }
 
@@ -954,7 +954,7 @@ var::operator bool() const
     case ARRAY:
         return arr->size() > 0;
     default:
-        throw std::runtime_error("unimplemented type:" + type);
+        throw std::runtime_error("unimplemented type");
     }
 }
 
