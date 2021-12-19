@@ -184,9 +184,6 @@ void generateGTest(const var &val1, const int op, const var &val2, const var &re
 #include <gtest/gtest.h>
 #include "var.hpp"
 #include <iostream>
-#include <fstream>
-#include <glob.h>
-#include <iomanip>
 
 )";
         std::cout << header << std::endl;

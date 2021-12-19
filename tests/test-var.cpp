@@ -2,8 +2,6 @@
 #include "var.hpp"
 #include <iostream>
 #include <fstream>
-#include <glob.h>
-#include <iomanip>
 
 std::string readFileIntoString(const std::string &path)
 {
@@ -1358,50 +1356,40 @@ TEST(DynamicV, testIsInifinity3)
 
 TEST(DynamicV, JSONTestSuite)
 {
-    std::string globPath("./JSONTestSuite/src/JSONTestSuite/test_parsing/*");
+#include "json-test-suite-filenames.h"
 
-    glob_t glob_result;
-    int ret = glob(globPath.c_str(), GLOB_TILDE, NULL, &glob_result);
-    EXPECT_EQ(ret, 0);
-    std::cout << glob_result.gl_pathc << std::endl;
-    if (ret == 0)
+    for (const std::string &filePath : filenames)
     {
-        for (unsigned int i = 0; i < glob_result.gl_pathc; ++i)
+        const std::string &a = readFileIntoString(filePath);
+        // std::cout << a << std::endl;
+
+        bool shouldFail = false;
+        try
         {
-            std::string filePath(glob_result.gl_pathv[i]);
-            std::cout << filePath << std::endl;
+            u16converter{}.from_bytes(a);
+        }
+        catch (...)
+        {
+            // data is not properly utf-8 encoded and cannot be converted to unicode
+            shouldFail = true;
+        }
 
-            const std::string &a = readFileIntoString(filePath);
-            // std::cout << a << std::endl;
+        bool mustSuccess = filePath.find("/y_") != std::string::npos;
+        bool mustFail = filePath.find("/n_") != std::string::npos;
+        if (!mustSuccess && !mustFail)
+        {
+            mustSuccess = !shouldFail;
+            mustFail = shouldFail;
+        }
 
-            bool shouldFail = false;
-            try
-            {
-                u16converter{}.from_bytes(a);
-            }
-            catch (...)
-            {
-                // data is not properly utf-8 encoded and cannot be converted to unicode
-                shouldFail = true;
-            }
-
-            bool mustSuccess = filePath.find("/y_") != std::string::npos;
-            bool mustFail = filePath.find("/n_") != std::string::npos;
-            if (!mustSuccess && !mustFail)
-            {
-                mustSuccess = !shouldFail;
-                mustFail = shouldFail;
-            }
-
-            if (mustFail)
-            {
-                ASSERT_THROW(json::parse(a), std::runtime_error);
-            }
-            else if (mustSuccess)
-            {
-                const var &obj = json::parse(a);
-                ASSERT_TRUE(obj != undefined());
-            }
+        if (mustFail)
+        {
+            ASSERT_THROW(json::parse(a), std::runtime_error);
+        }
+        else if (mustSuccess)
+        {
+            const var &obj = json::parse(a);
+            ASSERT_TRUE(obj != undefined());
         }
     }
 }
