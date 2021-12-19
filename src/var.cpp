@@ -33,7 +33,7 @@ var::var(const var &other) : type(other.type)
         arr = other.arr;
         break;
     case UNDEFINED:
-        //do nothing
+        // do nothing
         break;
     default:
         throw std::runtime_error("unimplemented type");
@@ -50,7 +50,7 @@ var::var(var &&other) : type(other.type), str(std::move(other.str)), number(othe
     case OBJECT:
     case ARRAY:
     case UNDEFINED:
-        //do nothing
+        // do nothing
         break;
     default:
         throw std::runtime_error("unimplemented type");
@@ -571,8 +571,8 @@ var var::operator+(const var &other) const
 }
 
 /**
-* If differenceOrIntersection is set to false, it will calculate the difference, otherwise the intersection of both arrays.
-*/
+ * If differenceOrIntersection is set to false, it will calculate the difference, otherwise the intersection of both arrays.
+ */
 void var::performArrayOperation(bool differenceOrIntersection, var &target, const var &other) const
 {
     if (other.getType() != ARRAY || target.getType() != ARRAY)
@@ -600,8 +600,8 @@ void var::performArrayOperation(bool differenceOrIntersection, var &target, cons
 }
 
 /**
-* If differenceOrIntersection is set to false, it will calculate the difference, otherwise the intersection of both arrays.
-*/
+ * If differenceOrIntersection is set to false, it will calculate the difference, otherwise the intersection of both arrays.
+ */
 void var::performObjectOperation(bool differenceOrIntersection, var &target, const var &other) const
 {
     if (other.getType() != OBJECT || target.getType() != OBJECT)
@@ -688,7 +688,7 @@ var var::operator/(const var &other)
     {
         if (other.number > 0)
         {
-            std::size_t slice = other.number;
+            std::size_t slice = (std::size_t)other.number;
             if (slice < arr->size())
             {
                 auto newarray = std::make_shared<std::vector<var>>();
@@ -699,7 +699,7 @@ var var::operator/(const var &other)
         }
         else
         {
-            std::size_t slice = -other.number;
+            std::size_t slice = (std::size_t)-other.number;
             if (slice < arr->size())
             {
                 auto newarray = std::make_shared<std::vector<var>>();
@@ -733,7 +733,7 @@ var &var::operator/=(const var &other)
     {
         if (other.number > 0)
         {
-            std::size_t slice = other.number;
+            std::size_t slice = (std::size_t)other.number;
             if (slice < arr->size())
             {
                 arr->erase(arr->end() - slice, arr->end());
@@ -745,7 +745,7 @@ var &var::operator/=(const var &other)
         }
         else
         {
-            std::size_t slice = -other.number;
+            std::size_t slice = (std::size_t)-other.number;
             if (slice < arr->size())
             {
                 arr->erase(arr->begin(), arr->begin() + slice);
@@ -827,7 +827,7 @@ var &var::get(const var &key)
 {
     if (type == ARRAY)
     {
-        return arr->at(key.getNumber());
+        return arr->at((std::size_t)key.getNumber());
     }
     else if (type == OBJECT && dc != NULL)
     {
@@ -1327,7 +1327,7 @@ var json::parseCore(const var &str)
     while (ctxStack.length() > 0)
     {
         var &ctx = ctxStack.getVector()->back();
-        int level = valueStack.length().getNumber() - ctx[k_level].getNumber();
+        int level = (int)(valueStack.length().getNumber() - ctx[k_level].getNumber());
 
         if (ctx[k_state] == GET_json)
         {
@@ -1479,7 +1479,7 @@ var json::parseCore(const var &str)
         }
         else if (ctx[k_state] == GET_TRUE_FALSE_NULL)
         {
-            int leftOverCharacters = str.getU16String().size() - c;
+            int leftOverCharacters = (int)str.getU16String().size() - c;
             var token4 = std::u16string(str.getU16String(), c, std::min(4, leftOverCharacters));
             var token5 = std::u16string(str.getU16String(), c, std::min(5, leftOverCharacters));
             if (token4 == "true")
@@ -1514,7 +1514,7 @@ var json::parseCore(const var &str)
             int beforeDigits = c;
             consumeDigitsAtLeastOne(str, c, digitCS);
 
-            //assert integer part does not start with zero, when larger than one character
+            // assert integer part does not start with zero, when larger than one character
             if (c - beforeDigits > 1 && str.getU16String()[beforeDigits] == '0')
             {
                 throw UnexpectedCharacterException(str.getU16String()[beforeDigits], beforeDigits);
