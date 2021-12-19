@@ -294,7 +294,7 @@ void replaceSpecialCharacters(std::u16string &dest, const std::u16string &source
         {
             std::stringstream stream;
             stream << std::setfill('0') << std::setw(4) << std::hex << ch;
-            std::string result();
+            std::string result;
             dest.append(u"\\u");
             dest.append(u16converter{}.from_bytes(stream.str()));
         }
