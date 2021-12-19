@@ -66,8 +66,12 @@ jobs:
           brew install p7zip cmake ninja
           ninja --version
           cmake --version
-      - name: Build & Test
+      - name: Build & Test (Win)
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          chcp 65001 #set code page to utf-8
+          bash -c "./run.sh test" 
+      - name: Build & Test (Linux & Mac)
         shell: bash
         run: |
-          chcp 65001 #for windows
           ./run.sh test
