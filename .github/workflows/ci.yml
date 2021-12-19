@@ -69,4 +69,5 @@ jobs:
       - name: Build & Test
         shell: bash
         run: |
+          chcp 65001 #for windows
           ./run.sh test
