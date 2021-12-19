@@ -2,7 +2,6 @@
 #include <gtest/gtest.h>
 #include "var.hpp"
 #include <iostream>
-#include <cuchar>
 #include <fstream>
 #include <glob.h>
 #include <iomanip>
