@@ -2,9 +2,6 @@
 #include <gtest/gtest.h>
 #include "var.hpp"
 #include <iostream>
-#include <fstream>
-#include <glob.h>
-#include <iomanip>
 
 
 TEST(GeneratedOperatorTests, NUMBER_PLUS_NUMBER_0_0_0_0)
