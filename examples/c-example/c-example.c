@@ -3,7 +3,7 @@
 
 int main()
 {
-    const unsigned int LEN = 256;
+    enum { LEN = 256 };
     char buf[LEN];
 
     void *val = var_json_parse("{\"bool\":true,\"num\":1.234,\"str\":\"demo text\"}");
