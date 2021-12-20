@@ -1388,8 +1388,17 @@ TEST(DynamicV, JSONTestSuite)
         }
         else if (mustSuccess)
         {
-            const var &obj = json::parse(a);
-            ASSERT_TRUE(obj != undefined());
+            try
+            {
+                const var &obj = json::parse(a);
+                ASSERT_TRUE(obj != undefined());
+            }
+            catch (std::runtime_error &e)
+            {
+                std::cerr <<  "Unexpected error while parsing:\n" << a << std::endl;
+                std::cerr <<  "Test file:\n" << filePath << std::endl;
+                throw e;
+            }
         }
     }
 }
