@@ -5,7 +5,8 @@
 
 std::string readFileIntoString(const std::string &path)
 {
-    std::ifstream input_file(path, std::ios::binary);
+    std::ifstream input_file(path,std::ios::binary);
+    input_file.imbue(std::locale("en_US.UTF-8"));
     if (!input_file.is_open())
     {
         std::cerr << "Could not open the file - '"
