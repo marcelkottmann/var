@@ -343,7 +343,7 @@ var var::toJSON() const
         }
         else
         {
-           return toString();
+            return toString();
         }
     case BOOLEAN:
         return toString();
@@ -757,29 +757,36 @@ var &var::operator/=(const var &other)
     }
     else if (getType() == ARRAY && other.getType() == NUMBER)
     {
-        if (other.number > 0)
+        if (!isNaN(other) && !isInfinity(other))
         {
-            std::size_t slice = (std::size_t)other.number;
-            if (slice < arr->size())
+            if (other.number > 0)
             {
-                arr->erase(arr->end() - slice, arr->end());
+                std::size_t slice = (std::size_t)other.number;
+                if (slice < arr->size())
+                {
+                    arr->erase(arr->end() - slice, arr->end());
+                }
+                else
+                {
+                    arr->clear(); // empty array
+                }
             }
             else
             {
-                arr->clear(); // empty array
+                std::size_t slice = (std::size_t)-other.number;
+                if (slice < arr->size())
+                {
+                    arr->erase(arr->begin(), arr->begin() + slice);
+                }
+                else
+                {
+                    arr->clear(); // empty array
+                }
             }
         }
         else
         {
-            std::size_t slice = (std::size_t)-other.number;
-            if (slice < arr->size())
-            {
-                arr->erase(arr->begin(), arr->begin() + slice);
-            }
-            else
-            {
-                arr->clear(); // empty array
-            }
+            arr->clear();
         }
         return *this;
     }
