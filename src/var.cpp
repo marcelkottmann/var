@@ -164,9 +164,24 @@ var var::toString() const
 
     case NUMBER:
     {
-        std::ostringstream oss;
-        oss << std::setprecision(std::numeric_limits<double>::digits10) << std::noshowpoint << number;
-        strResult.append(u16converter{}.from_bytes(oss.str().c_str()));
+        if (isNaN(*this))
+        {
+            strResult.append(u"nan");
+        }
+        else if (isInfinity(*this))
+        {
+            if (this->number < 0)
+            {
+                strResult.append(u"-");
+            }
+            strResult.append(u"inf");
+        }
+        else
+        {
+            std::ostringstream oss;
+            oss << std::setprecision(std::numeric_limits<double>::digits10) << std::noshowpoint << number;
+            strResult.append(u16converter{}.from_bytes(oss.str().c_str()));
+        }
     }
     break;
 
@@ -310,7 +325,7 @@ var var::toJSON() const
     switch (type)
     {
     case UNDEFINED:
-        return "undefined";
+        return u"undefined";
     case STRING:
     {
         std::u16string dest;
@@ -322,6 +337,14 @@ var var::toJSON() const
         return result;
     }
     case NUMBER:
+        if (isNaN(*this) || isInfinity(*this))
+        {
+            return u"null"; // this is how nodejs does it, because nan or inf are valid json tokens.
+        }
+        else
+        {
+           return toString();
+        }
     case BOOLEAN:
         return toString();
     case OBJECT:
@@ -686,26 +709,29 @@ var var::operator/(const var &other)
     }
     else if (getType() == ARRAY && other.getType() == NUMBER)
     {
-        if (other.number > 0)
+        if (!isInfinity(other) && !isNaN(other))
         {
-            std::size_t slice = (std::size_t)other.number;
-            if (slice < arr->size())
+            if (other.number > 0)
             {
-                auto newarray = std::make_shared<std::vector<var>>();
-                newarray->reserve(arr->size() - slice);
-                newarray->insert(newarray->begin(), arr->begin(), arr->end() - slice);
-                return var(newarray);
+                std::size_t slice = (std::size_t)other.number;
+                if (slice < arr->size())
+                {
+                    auto newarray = std::make_shared<std::vector<var>>();
+                    newarray->reserve(arr->size() - slice);
+                    newarray->insert(newarray->begin(), arr->begin(), arr->end() - slice);
+                    return var(newarray);
+                }
             }
-        }
-        else
-        {
-            std::size_t slice = (std::size_t)-other.number;
-            if (slice < arr->size())
+            else
             {
-                auto newarray = std::make_shared<std::vector<var>>();
-                newarray->reserve(arr->size() - slice);
-                newarray->insert(newarray->begin(), arr->begin() + slice, arr->end());
-                return var(newarray);
+                std::size_t slice = (std::size_t)-other.number;
+                if (slice < arr->size())
+                {
+                    auto newarray = std::make_shared<std::vector<var>>();
+                    newarray->reserve(arr->size() - slice);
+                    newarray->insert(newarray->begin(), arr->begin() + slice, arr->end());
+                    return var(newarray);
+                }
             }
         }
         return var(ARRAY); // empty array

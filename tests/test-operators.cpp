@@ -16992,7 +16992,7 @@ TEST(GeneratedOperatorTests, ARRAY_DIV_NUMBER_2_1_0_4)
 {
   var val1 = array(1,"hello");
   var val2 = INFINITY;
-  var expected = array(1,"hello");
+  var expected = array();
   var result = val1 / val2;
   EXPECT_EQ(ARRAY, result.getType());
   EXPECT_EQ(expected.toJSON(), result.toJSON());
@@ -17002,7 +17002,7 @@ TEST(GeneratedOperatorTests, ARRAY_DIV_NUMBER_2_1_0_5)
 {
   var val1 = array(1,"hello");
   var val2 = -INFINITY;
-  var expected = array(1,"hello");
+  var expected = array();
   var result = val1 / val2;
   EXPECT_EQ(ARRAY, result.getType());
   EXPECT_EQ(expected.toJSON(), result.toJSON());
@@ -17172,7 +17172,7 @@ TEST(GeneratedOperatorTests, ARRAY_DIV_NUMBER_2_2_0_4)
 {
   var val1 = array(1,2);
   var val2 = INFINITY;
-  var expected = array(1,2);
+  var expected = array();
   var result = val1 / val2;
   EXPECT_EQ(ARRAY, result.getType());
   EXPECT_EQ(expected.toJSON(), result.toJSON());
@@ -17182,7 +17182,7 @@ TEST(GeneratedOperatorTests, ARRAY_DIV_NUMBER_2_2_0_5)
 {
   var val1 = array(1,2);
   var val2 = -INFINITY;
-  var expected = array(1,2);
+  var expected = array();
   var result = val1 / val2;
   EXPECT_EQ(ARRAY, result.getType());
   EXPECT_EQ(expected.toJSON(), result.toJSON());
