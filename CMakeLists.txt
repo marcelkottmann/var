@@ -6,7 +6,8 @@ set(CMAKE_CXX_STANDARD 11)
 
 if (MSVC)
     # warning level 4 and all warnings as errors
-    add_compile_options(/W4 /WX)
+    add_compile_options(/bigobj /W4 /WX)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 else()
     # lots of warnings and all warnings as errors
     add_compile_options(-Wall -Wextra -pedantic -Werror)

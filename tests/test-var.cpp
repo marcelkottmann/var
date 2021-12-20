@@ -533,8 +533,8 @@ TEST(DynamicV, parseJSONValidEscapeSeqHex1)
     var obj = json::parse(d);
     EXPECT_EQ(obj.getType(), OBJECT);
     EXPECT_EQ(obj.keys().length(), 1);
-    EXPECT_EQ(obj["\uAF01"].getType(), OBJECT);
-    EXPECT_EQ(obj["\uAF01"].keys().length(), 0);
+    EXPECT_EQ(obj[u"\uAF01"].getType(), OBJECT);
+    EXPECT_EQ(obj[u"\uAF01"].keys().length(), 0);
 }
 
 TEST(DynamicV, parseJSONValidEscapeSeqHex2)
@@ -543,8 +543,8 @@ TEST(DynamicV, parseJSONValidEscapeSeqHex2)
     var obj = json::parse(d);
     EXPECT_EQ(obj.getType(), OBJECT);
     EXPECT_EQ(obj.keys().length(), 1);
-    EXPECT_EQ(obj["\uAf01"].getType(), OBJECT);
-    EXPECT_EQ(obj["\uAf01"].keys().length(), 0);
+    EXPECT_EQ(obj[u"\uAf01"].getType(), OBJECT);
+    EXPECT_EQ(obj[u"\uAf01"].keys().length(), 0);
 }
 
 TEST(DynamicV, parseJSONInvalidEscapeSeqHex)
@@ -800,11 +800,11 @@ TEST(DynamicV, parseJSONUnicodeEscapingArray)
 
     EXPECT_EQ(obj[0].getType(), STRING);
     EXPECT_EQ(obj[0].length(), 1);
-    EXPECT_EQ(obj[0], "\u1234");
+    EXPECT_EQ(obj[0], u"\u1234");
 
     EXPECT_EQ(obj[1].getType(), STRING);
     EXPECT_EQ(obj[1].length(), 1);
-    EXPECT_EQ(obj[1], "\u4321");
+    EXPECT_EQ(obj[1], u"\u4321");
 
     EXPECT_EQ(obj[2].getType(), STRING);
     EXPECT_EQ(obj[2].length(), 1);
@@ -1366,7 +1366,7 @@ TEST(DynamicV, JSONTestSuite)
         bool shouldFail = false;
         try
         {
-            u16converter{}.from_bytes(a);
+            std::u16string ignore = u16converter{}.from_bytes(a);
         }
         catch (...)
         {

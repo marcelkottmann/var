@@ -14,7 +14,9 @@ char *convert(char *buf, size_t len, const std::u16string str)
         return NULL;
     }
 
-    strncpy(buf, result.c_str(), result.length() + 1);
+    result.copy(buf, result.length());
+    buf[result.length()] = '\0';
+
     return buf;
 }
 
