@@ -5,8 +5,8 @@
 
 std::string readFileIntoString(const std::string &path)
 {
-    std::ifstream input_file(path,std::ios::binary);
-    input_file.imbue(std::locale("en_US.UTF-8"));
+    std::ifstream input_file(path, std::ios::binary);
+    input_file.imbue(std::locale(input_file.getloc(), new std::codecvt_utf8<wchar_t>));
     if (!input_file.is_open())
     {
         std::cerr << "Could not open the file - '"
@@ -1396,8 +1396,10 @@ TEST(DynamicV, JSONTestSuite)
             }
             catch (std::runtime_error &e)
             {
-                std::cerr <<  "Unexpected error while parsing:\n" << a << std::endl;
-                std::cerr <<  "Test file:\n" << filePath << std::endl;
+                std::cerr << "Unexpected error while parsing:\n"
+                          << a << std::endl;
+                std::cerr << "Test file:\n"
+                          << filePath << std::endl;
                 throw e;
             }
         }
