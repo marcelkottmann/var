@@ -1368,6 +1368,14 @@ TEST(DynamicV, JSONTestSuite)
         try
         {
             std::u16string ignore = u16converter{}.from_bytes(a);
+            if (ignore.find((char16_t)0) != std::string::npos)
+            {
+                // ignore contains null (0) character. this is most probably
+                // the result of a bad utf-8 sequence (overlong sequence) which
+                // seems to be converted to null character on WIN platform.
+                // on linux this case throws an exception (as expected).
+                shouldFail = true;
+            }
         }
         catch (...)
         {
